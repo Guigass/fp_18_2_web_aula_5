@@ -4,9 +4,11 @@ using fp_stack.web.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 
 namespace fp_stack.web
 {
@@ -26,7 +28,7 @@ namespace fp_stack.web
             //services.AddScoped
             //services.AddSingleton
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=StackDB2;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = @"Server=localhost;Database=StackDB2;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<Context>(options => options.UseSqlServer(connection));
 
             //services.AddDataProtection()
@@ -41,8 +43,15 @@ namespace fp_stack.web
                         {
                             o.LoginPath = "/account/index";
                             o.AccessDeniedPath = "/account/denied";
-                          
+
                         });
+
+            services.Configure<GzipCompressionProviderOptions>(o => o.Level = System.IO.Compression.CompressionLevel.Fastest);
+
+            services.AddResponseCompression(o =>
+            {
+                o.Providers.Add<GzipCompressionProvider>();
+            });
 
         }
 
@@ -54,11 +63,20 @@ namespace fp_stack.web
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseResponseCompression();
             app.UseMeuLog();
-            app.UseStaticFiles();
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    const int durationInSeconds = 60 * 60 * 24;
+                    ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+                        "public,max-age=" + durationInSeconds;
+                }
+            });
+            
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

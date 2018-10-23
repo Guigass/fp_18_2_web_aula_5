@@ -7,10 +7,11 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="https://sorgalla.com/jcarousel/examples/basic/jcarousel.basic.css" />
-        <link href="~/css/custom.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/bundle.min.css" />
+        <link rel="stylesheet" href="~/assets/category/categorias.sprite.css" />
     </environment>
+
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
@@ -23,9 +24,12 @@
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" ></script>
+        <script src="~/js/site.js"></script>
         <script src="https://sorgalla.com/jcarousel/dist/jquery.jcarousel.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
     </environment>
+
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
@@ -41,7 +45,8 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
         <script src="https://sorgalla.com/jcarousel/dist/jquery.jcarousel.min.js"></script>
-    </environment>	    
+    </environment>	 
+    
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
